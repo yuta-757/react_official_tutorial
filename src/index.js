@@ -8,7 +8,6 @@ class Square extends React.Component {
           value: null,
         };
       }
-    
 
     render() {
       return (
@@ -20,7 +19,7 @@ class Square extends React.Component {
         </button>
       );
     }
-q}
+}
   
   class Board extends React.Component {
     renderSquare(i) {
