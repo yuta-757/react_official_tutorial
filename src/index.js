@@ -1,30 +1,60 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-class Square extends React.Component {
+// Squareコンポーネントは制御されたコンポーネント
+// class Square extends React.Component {
+  /* Squareはゲームの状態を管理しなくなったので削除
     constructor(props){
       super(props);
         this.state = {
           value: null,
         };
       }
-
-    render() {
-      return (
-        <button 
-        className="square" 
-        onClick={() => {
-          this.setState({value: 'X'})
-          }}>
-          {this.state.value}
-        </button>
-      );
-    }
-}
+  */
+//     render() {
+//       return (
+//         <button 
+//           className="square" 
+//           onClick={() => 
+//           this.props.onClick()}
+//         >
+//           {this.props.value}
+//         </button>
+//       );
+//     }
+// }
+  function Square(props){
+    return(
+      <button className="square" onClick={props.onClick}>
+        {props.value}
+      </button>
+    );
+  }
   
   class Board extends React.Component {
+    constructor(props){
+      super(props);
+      this.state = {
+          squares: Array(9).fill(null),
+        };
+    }
+
+    handleClick(i){
+      // .slice()で配列のコピー
+      const squares = this.state.squares.slice();
+      squares[i] = 'X';
+      this.setState({squares: squares});
+    }
+
     renderSquare(i) {
-      return <Square value={i}/>;
+      // Squareがvalueプロパティ('X', '0', または空のマス目の場合はnull）を受け取る
+      // javascriptがretrunの後にセミコロンを挿入するのを防ぐため()をつける
+      return (
+      <Square 
+        value={this.state.squares[i]}
+        onClick={() => this.handleClick(i)}
+        />
+      );
     }
   
     render() {
