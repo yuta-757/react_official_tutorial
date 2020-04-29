@@ -115,13 +115,16 @@ import './index.css';
         history: [{
           squares: Array(9).fill(null),
         }],
+        stepNumber: 0,
         xIsNext: true,
       };
     }
 
     handleClick(i){
       // historyの追加
-      const history = this.state.history;
+      // const history = this.state.history;
+      // 時間の巻き戻しをした際、そこから見て将来の打ち手は切り捨てる
+      const history = this.state.history.slice(0, this.state.stepNumber + 1);
       const current = history[history.length　-1];
 
       const squares = current.squares.slice();
@@ -134,16 +137,25 @@ import './index.css';
         history: history.concat([{
           squares: squares,
         }]),
+        stepNumber: history.length,
         xIsNext: !this.state.xIsNext,
       });
     }
 
+    jumpTo(step){
+      this.setState({
+        stepNumber: step,
+        xIsNext: (step % 2) === 0,
+      });
+    }
 
     render() {
       // stateのhistoryを定義
       const history = this.state.history;
       // 配列の長さ - 1 = 最も最後に追加されたボート（添字）
-      const current = history[history.length - 1];
+      // const current = history[history.length - 1];
+      // 現在選択されている着手をレンダーするようにする
+      const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
 
       // 過去の着手の表示
@@ -152,7 +164,8 @@ import './index.css';
         'Go to move #' + move:
         'GO to game start';
         return(
-          <li>
+          // keyを追加
+          <li key={move}>
             <button onClick={() => this.jumpTo(move)}>{desc}</button>
           </li>
         );
